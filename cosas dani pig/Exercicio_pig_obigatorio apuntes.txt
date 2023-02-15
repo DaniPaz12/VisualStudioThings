@@ -1,0 +1,3 @@
+-en hadoop master instalamos unzip
+sudo apt insall unzip
+

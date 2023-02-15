@@ -1,0 +1,84 @@
+vagrant suspend
+vagrant resume
+vagrant ssh hadoop-master
+
+para entrar sudo hadoop
+pwd
+
+
+ficheiro = LOAD 'testcompras.txt' using PigStorage('\t');
+vendas_sanjose = FILTER ficheiro BY $2 == 'San Jose';
+DUMP vendas_sanjose;
+
+ficheiro = LOAD 'testcompras.txt' using PigStorage('\t') as (data, hora, tenda, tipo, venda, pago);
+
+vendas_sanjose = FILTER ficheiro BY tenda == 'San Jose';
+
+DUMP vendas_sanjose
+
+
+
+1)+ Mostra por pantalla os datos das vendas pagadas con 'MasterCard'.
+pagos_mastercard = FILTER ficheiro BY pago == 'MasterCard';
+DUMP pagos_mastercard
+
+
+2)+ Mostra por pantalla os datos das vendas de xoguetes ('Toys')
+vendas_toys = FILTER ficheiro BY tipo == 'Toys';
+DUMP vendas_toys
+
+3)+ Escribe a disco os datos das vendas maiores de 200
+ventas_200 = FILTER ficheiro BY venda >= '200' 
+DUMP ventas_200
+STORE ventas_200 INTO 'lista_ventas>200';
+
+4)+ Escribe a disco dos datos das vendas maiores de 400 pagadas con MasterCard
+pagos_mastercard = FILTER ficheiro BY venda >= '400';   
+DUMP ventas_400
+STORE ventas_400 INTO 'lista_ventasMaster>400';
+
+
+
+
+RESPUESTAS PROFE
+
+ficheiro = LOAD 'testcompras.txt' using PigStorage('\t') as (data, hora, tenda, tipo, venda, pago);
++ Mostra por pantalla os datos das vendas pagadas con 'MasterCard'.
+
+vendas_mastercard = FILTER ficheiro BY pago == 'MasterCard';
+DUMP vendas_mastercard;
++ Mostra por pantalla os datos das vendas de xoguetes ('Toys')
+
+vendas_xoguetes = FILTER ficheiro BY tipo == 'Toys';
+DUMP vendas_xoguetes;
++ Escribe a disco os datos das vendas maiores de 200
+
+vendas_mais200 = FILTER ficheiro BY venda > 200;
+--DUMP vendas_mais200;
+
+STORE vendas_mais200 INTO 'vendas_mais200';
++ Escribe a disco dos datos das vendas maiores de 400 pagadas con MasterCard
+
+vendas_mastercard_mais400 = FILTER ficheiro BY (venda > 400) and (pago == 'MasterCard');
+--DUMP vendas_mastercard_mais400;
+
+STORE vendas_mastercard_mais400 INTO 'mastercard_mais400';
++ Escribe a disco dos datos das vendas pagadas con Visa ou Cash, valores separados por punto e coma ';'
+
+vendas_visa_cash = FILTER ficheiro BY (pago == 'Visa') or (pago == 'Cash');
+--DUMP vendas_visa_cash;
+
+STORE vendas_visa_cash INTO 'vendas_visa_cash' USING PigStorage(';');
++ Mostrar por pantalla tenda, tipo e venda das compras feitas con Cash
+
+vendas_cash = FILTER ficheiro BY (pago == 'Cash');
+info_vendas_cash = FOREACH vendas_cash GENERATE tenda, tipo, venda;
+DUMP info_vendas_cash;
+
+
++ Categoría + Total de vendas por categorías
+
+
++ Venda máis alta para cada tipo de pago
+
++ Total de vendas e número de vendas por tipo de pago (indicando tamén o tipo de pago)
